@@ -1,25 +1,16 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+prioridade_map = {
+    "P0": {"nivel": "Crítico", "impacto": "Extenso", "exemplo": "Falha/interrupção do sistema"},
+    "P1": {"nivel": "Alto", "impacto": "Grande", "exemplo": "Mau funcionamento do recurso principal"},
+    "P2": {"nivel": "Moderado", "impacto": "Moderado", "exemplo": "Mau funcionamento de recursos menores"},
+    "P3": {"nivel": "Baixo", "impacto": "Menor", "exemplo": "Funcionalidade ou recurso que impede alguns usuários de usar o produto"},
+    "P4": {"nivel": "Negligenciável", "impacto": "Negligenciável", "exemplo": "É bom ter um recurso que poderia ser incluído no produto atual"}
+}
 
-app = Flask(__name__)
-CORS(app)
+def obter_prioridade(prioridade):
+    p = prioridade_map.get(prioridade.upper())
+    if p:
+        return f"Prioridade: {prioridade}\nNível: {p['nivel']}\nImpacto: {p['impacto']}\nExemplo: {p['exemplo']}"
+    return "Prioridade inválida!"
 
-@app.route('/classificar', methods=['POST'])
-def classificar():
-    data = request.json
 
-    impacto = data.get('impacto', '').lower()
-    if impacto not in ['alto', 'médio', 'baixo']:
-        return jsonify({'erro': 'Impacto inválido. Use alto, médio ou baixo.'}), 400
-
-    if impacto == 'alto':
-        prioridade = 'P1'
-    elif impacto == 'médio':
-        prioridade = 'P2'
-    else:
-        prioridade = 'P3'
-
-    return jsonify({'prioridade': prioridade})
-
-if __name__ == "__main__":
-    app.run(port=5001)
+print(obter_prioridade("P1"))

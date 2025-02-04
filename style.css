@@ -34,7 +34,7 @@ body {
     overflow-y: auto;
 }
 
-.user-message {
+.user-message ,p {
     background-color: #e1ffc7;
     color: #333333;
     padding: 10px;

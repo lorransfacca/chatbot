@@ -1,72 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ChatBot - Suporte</title>
         <link rel="stylesheet" href="style.css">
-        <title>ChatBot - Suporte Facca</title>
     </head>
     <body>
         <div class="chat-container">
-            <div class="chat-header">ChatBot - Suporte Facca</div>
+            <div class="chat-header">ChatBot - Facca</div>
             <div class="chat-box" id="chat-box"></div>
             <div class="input-container">
-                <input type="text" id="user-input" placeholder="Digite o ID do incidente...">
+                <input type="text" id="user-input" placeholder="ID do Incidente... (ex:P1)">
                 <button id="send-button">Enviar</button>
             </div>
         </div>
-        <script>
-            const API_FLASK = 'http://localhost:5001/classificar';
-            const API_SPRING = 'http://localhost:8080/api/incidentes/status';
-
-            document.getElementById('send-button').addEventListener('click', async () => {
-                const userInput = document.getElementById('user-input').value.trim();
-                if (!userInput) {
-                    alert("Por favor, digite algo.");
-                    return;
-                }
-
-                const chatBox = document.getElementById('chat-box');
-                chatBox.innerHTML += `<div class="user-message">${userInput}</div>`;
-
-                if (isNaN(userInput)) {
-                    
-                    try {
-                        const response = await fetch(API_FLASK, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ impacto: userInput })
-                        });
-
-                        const data = await response.json();
-                        if (data.erro) {
-                            chatBox.innerHTML += `<div class="bot-message">Erro: ${data.erro}</div>`;
-                        } else {
-                            chatBox.innerHTML += `<div class="bot-message">Prioridade: ${data.prioridade}</div>`;
-                        }
-                    } catch (error) {
-                        console.error('Erro na comunicação com o Flask:', error);
-                        chatBox.innerHTML += `<div class="bot-message">Erro ao classificar impacto.</div>`;
-                    }
-                } else {
-                    
-                    try {
-                        const response = await fetch(`${API_SPRING}/${userInput}`);
-                        if (!response.ok) {
-                            throw new Error(`Erro HTTP: ${response.status}`);
-                        }
-
-                        const status = await response.text();
-                        chatBox.innerHTML += `<div class="bot-message">${status}</div>`;
-                    } catch (error) {
-                        console.error('Erro na comunicação com o Spring Boot:', error);
-                        chatBox.innerHTML += `<div class="bot-message">Erro ao buscar status do incidente.</div>`;
-                    }
-                }
-
-                document.getElementById('user-input').value = "";
-                chatBox.scrollTop = chatBox.scrollHeight;
-            });
-        </script>
+        <script src="script.js"></script>
     </body>
 </html>
